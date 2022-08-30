@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MyRazorApplicationWeb.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+    <a id="manage"  asp-area="Identity" asp-page="/Account/Profile" title="Manage">@*Hello @UserManager.GetUserName(User)!*@<i style="font-size:20px; margin:0;"class="btn btn-info bi bi-person-circle"></i></a>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop3" style="">
+      
+        <a id="manage"  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="dropdown-item">Profile</a>
+     
+      <form id="logoutForm"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+            <button id="logout" type="submit" class="dropdown-item" >Logout</button>
+        </form>
+    </div>
+  </div>
+</div>
+    
+}
+else
+{
+    <li class="nav-item">
+        <a class="btn btn-info m-1" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-warning m-1" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>

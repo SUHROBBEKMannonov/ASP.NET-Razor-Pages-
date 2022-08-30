@@ -1,0 +1,146 @@
+﻿@page "/"
+@model MyRazorApplicationWeb.Areas.Identity.Pages.Account.ProfileModel
+@{
+    var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
+}
+@{
+	
+	int number=0;
+}
+
+@using Microsoft.AspNetCore.Identity
+@using MyRazorApplicationWeb.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+   @* <h2>Hello @UserManager.GetUserName(User)!</h2>*@
+
+   <div class="container p-3 pb-5">
+
+	<div class="row pt-4">
+			<div class="col-6">
+				<h1 class="text-primary ">List Of Users</h1>
+			</div>
+			<div class="col-6 text-end">
+				<a asp-page="/Account/Create" class="btn btn-warning  mt-2"><i class="bi bi-plus-square"></i>&nbsp Create</a>
+			</div>
+	</div>
+	<form asp-page="./Profile" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Profile">Back to full List</a>
+        </p>
+    </div>
+</form>
+					<table class= "table table-primary"  style=" with:100%">
+						<thead>
+							<tr>
+								<th>
+									№
+								</th>
+									<th>
+								 <a asp-page="./Profile" asp-route-sortOrder="@Model.NameSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Students[0].FirsName)
+                </a>
+
+								</th>
+									<th>
+									 <a asp-page="./Profile" asp-route-sortOrder="@Model.LNameSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Students[0].LastName)
+                </a>
+								</th>
+									<th>
+										 <a asp-page="./Profile" asp-route-sortOrder="@Model.EmailSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Students[0].Email)
+                </a>
+							                
+								</th>
+									<th>
+									Phone Number
+								</th>
+								<th>
+							             
+									 <a asp-page="./Profile" asp-route-sortOrder="@Model.DateSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Students[0].BirthDate)
+                </a>
+								</th>
+							
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach(var obj in Model.Students){
+						
+						number++;
+						<tr>
+							<td class="table-light">
+								@number
+							</td>
+							<td class="table-light">
+								@obj.FirsName
+							</td>
+							<td class="table-light">
+								@obj.LastName
+							</td>
+							<td class="table-light">
+								@obj.Email
+							</td>
+							<td class="table-light">
+							@obj.PhoneNumber
+							</td>
+							<td class="table-light">
+								@obj.BirthDate
+							</td >
+							
+							<td class="table-light">
+								
+									 
+								<a asp-page="/Account/Delete" asp-route-id="@obj.Id" style="text-decoration:none" ><i class="bi bi-trash-fill"></i> </a>
+								
+							
+								
+							</td>
+							</tr>
+							}
+						</tbody>
+
+
+
+					</table>
+				<a asp-page="./Profile"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Profile"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
+
+</div>
+}
+else
+{
+   <h2>You have to Log In your own Profile 
+       <a style="text-decoration:none;" asp-page="/Account/Login" >Click here</a>
+   </h2>
+}
+</ul>
